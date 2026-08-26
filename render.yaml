@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: shengsheng-price-compare-api
+    runtime: python
+    plan: free
+    buildCommand: python -m zipfile -e backend.zip . && pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: ALLOW_DEMO_FALLBACK
+        value: "true"
+      - key: PUBLIC_BASE_URL
+        value: https://shengsheng-price-compare-api.onrender.com
+      - key: APP_RETURN_URL
+        value: pricecompare://oauth-complete
+      - key: TOKEN_DATABASE_PATH
+        value: /tmp/tokens.db
+      - key: TOKEN_ENCRYPTION_KEY
+        generateValue: true
